@@ -24,15 +24,24 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
-
+    // resturent card and main data
     const menuCollection = client.db("ResturentDb").collection("resturent");
+    // just only review collection
     const reviewCollection = client.db("ResturentDb").collection("review");
+    const cartCollection = client.db("ResturentDb").collection("carts");
 
     app.get("/resturent", async (req, res) => {
       const result = await menuCollection.find().toArray();
       res.send(result);
     });
 
+    // carts collection
+    app.post("/carts", async (req, res) => {
+      const cartItem = req.body;
+      const result = await cartCollection.insertOne(cartItem);
+      res.send(result);
+    });
+    // review collection
     app.get("/reviews", async (req, res) => {
       const result = await reviewCollection.find().toArray();
       res.send(result);
@@ -59,3 +68,7 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
   console.log(`Bistro boss sitting on port ${port}`);
 });
+
+// ***
+// **
+//
